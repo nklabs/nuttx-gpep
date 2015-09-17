@@ -68,7 +68,7 @@ USAGE="
 
 USAGE:
     (1) rebuild specific image config
-        ${0} [-j N] [-B] <board-name> <config-name>
+        ${0} [-j N] [-B] <config-path> <build-name>
     (2) rebuild all image configs under configs/ara
         ${0} [-j N] [-B] all
 
@@ -77,8 +77,8 @@ Options:
   -B  : --always-build
 
 Arguments:
-  <board-name> is the name of the board in the configs directory
-  <config-name> is the name of the board configuration sub-directory
+  <config-path> ...
+  <build-name> ...
 
 "
 
@@ -207,11 +207,16 @@ main() {
   elif  [ "$#" -ne 2 ] ; then
     echo "Required parameters not specified."
     echo "$USAGE"
-    exit $ARA_BUILD_CONFIG_ERR_BAD_PARAMS
-  #capture parameters for board  & image
+    configpath="bridge/es2-debug-apbridgea"  
+    buildname="ara-es2-debug-apridgea"
+    echo "using default parameters"
+    echo "   configpath:" $configpath
+    echo "    buildname:" $buildname
+    #exit $ARA_BUILD_CONFIG_ERR_BAD_PARAMS
+  #capture parameters for chip  & board
   else
-    board=$1
-    image=$2
+    configpath=$1
+    buildname=$2
   fi
 
   # set build output path
@@ -232,6 +237,7 @@ main() {
       buildname=$(echo "$buildname" | sed -e "s:^$TOPDIR/configs/::")
       # repl slash with dash
       buildname=$(echo "$buildname" | sed -e "s#/#-#g")
+
       # build the image
       build_image_from_defconfig
       # check build result
@@ -246,20 +252,12 @@ main() {
     exit 0
   fi
 
-  # build from board+image params
-
   # set path to image config
-  configpath=${TOPDIR}/configs/${board}/${image}
+  configpath=${TOPDIR}/configs/ara/${configpath}
   if [ ! -d "${configpath}" ]; then
     echo "Build config '${configpath}' does not exist"
     exit $ARA_BUILD_CONFIG_ERR_CONFIG_NOT_FOUND
   fi
-  # create build name from config
-  # substitute "-" for "/"
-  board=$(echo "$board" | sed -e "s#/#-#")
-  image=$(echo "$image" | sed -e "s#/#-#")
-  buildname=${board}-${image}
-  # full path to defconfig file
   defconfigFile="${configpath}/defconfig"
   build_image_from_defconfig
   if [ $MAKE_RESULT -ne 0 ] ; then
