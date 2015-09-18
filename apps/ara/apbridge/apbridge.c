@@ -166,9 +166,15 @@ static int usb_init(void)
     return ret;
 }
 
+
+
+
 int bridge_main(int argc, char *argv[])
 {
     int ret;
+    lldbg("MDK:%d\n", __LINE__);
+
+    unipro_init();
 
     apbridge_backend_register(&apbridge_backend);
     srvmgr_start(services);

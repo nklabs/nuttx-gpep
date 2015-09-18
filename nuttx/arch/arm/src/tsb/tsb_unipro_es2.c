@@ -173,11 +173,12 @@ static void unipro_write(uint32_t offset, uint32_t v) {
     putreg32(v, (volatile unsigned int*)(AIO_UNIPRO_BASE + offset));
 }
 
-static int es2_fixup_mphy(void)
+static int es2_fixup_acmphy(void)
 {
     uint32_t debug_0720 = tsb_get_debug_reg(0x0720);
     uint32_t urc;
     const struct tsb_mphy_fixup *fu;
+    lldbg("MDK:%d\n", __LINE__);
 
     /*
      * Apply the "register 2" map fixups.
@@ -189,7 +190,7 @@ static int es2_fixup_mphy(void)
               __func__, urc);
         return urc;
     }
-    fu = tsb_register_2_map_mphy_fixups;
+    fu = tsb_register_2_map_acmphy_fixups;
     do {
         unipro_attr_local_write(fu->attrid, fu->value, fu->select_index,
                                 &urc);
@@ -221,7 +222,7 @@ static int es2_fixup_mphy(void)
               __func__, urc);
         return urc;
     }
-    fu = tsb_register_1_map_mphy_fixups;
+    fu = tsb_register_1_map_acmphy_fixups;
     do {
         if (tsb_mphy_r1_fixup_is_magic(fu)) {
             /* The magic R1 fixups come from the mysterious and solemn
@@ -908,7 +909,7 @@ void unipro_init(void)
         list_init(&cport->tx_fifo);
     }
 
-    if (es2_fixup_mphy()) {
+    if (es2_fixup_acmphy()) {
         lldbg("Failed to apply M-PHY fixups (results in link instability at HS-G1).\n");
     }
 

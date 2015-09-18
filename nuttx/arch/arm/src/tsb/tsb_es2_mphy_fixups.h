@@ -57,6 +57,9 @@ struct tsb_mphy_fixup {
 extern const struct tsb_mphy_fixup tsb_register_1_map_mphy_fixups[];
 extern const struct tsb_mphy_fixup tsb_register_2_map_mphy_fixups[];
 
+extern const struct tsb_mphy_fixup tsb_register_1_map_acmphy_fixups[];
+extern const struct tsb_mphy_fixup tsb_register_2_map_acmphy_fixups[];
+
 static inline int tsb_mphy_fixup_is_last(const struct tsb_mphy_fixup *fu) {
     return !!(fu->flags & TSB_MPHY_FIXUP_LAST);
 }
