@@ -55,9 +55,9 @@ int nklabs_main(int argc, char **argv) {
     printf("...\n");
 
     if(read){
-      printf("%x\n", *addr);
+      printf("%x\n", *((unsigned int*)addr));
     } else {
-      *addr = val;
+      *((unsigned int*)addr) = val;
     }
 
     return 0;
