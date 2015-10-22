@@ -36,6 +36,29 @@
 
 
 int nklabs_main(int argc, char **argv) {
-    lldbg("MDK: %d\n", __LINE__);
+
+    int read = 0;
+    unsigned int addr = 0;
+    unsigned int val = 0;
+    char *op = argv[1];
+
+    if (!strcmp(op, "read") || !strcmp(op, "r")) {
+      read = 1;
+    } else if (!strcmp(op, "write") || !strcmp(op, "w")) {
+      val  = strtoul(argv[3], NULL, 16);
+    } else {
+      printf("unrecognized operation\n");
+    }
+    addr = strtoul(argv[2], NULL, 16);
+
+    printf("op = %s\naddr = %x\nval=%x\n", read ? "Read" : "Write", addr, val);
+    printf("...\n");
+
+    if(read){
+      printf("%x\n", *addr);
+    } else {
+      *addr = val;
+    }
+
     return 0;
 }
