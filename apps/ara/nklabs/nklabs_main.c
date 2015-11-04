@@ -46,6 +46,9 @@
 #define GPIO_DIROUT         (GPIO_BASE + 0x14)
 #define GPIO_DIRIN          (GPIO_BASE + 0x18)
 
+#define GPIO_IO_PULL_UPDOWN_ENABLE_0 0x40000a20
+#define UART_IO_PULL_UPDOWN_ENABLE_0 0x40000a24
+
 int nklabs_main(int argc, char **argv) {
 
     /* int read = 0; */
@@ -71,7 +74,15 @@ int nklabs_main(int argc, char **argv) {
     /*   *((volatile unsigned int*)addr) = val; */
     /* } */
 
-  putreg32(1 << 24, GPIO_ODATASET );
-  putreg32(1 << 24, GPIO_DIROUT );
+  
+  /* putreg32(1 << 5, GPIO_ODATACLR ); */
+  /* putreg32(1 << 5, GPIO_DIROUT ); */
+
+
+  putreg32(1 << 0, UART_IO_PULL_UPDOWN_ENABLE_0 );
+  putreg32(1 << 9, GPIO_IO_PULL_UPDOWN_ENABLE_0 );
+  putreg32(1 << 9, GPIO_DIRIN );
+
+
   return 0;
 }

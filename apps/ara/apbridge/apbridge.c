@@ -53,6 +53,8 @@
 
 #include "apbridge_backend.h"
 
+int nklabs_main(int argc, char **argv);
+
 static struct apbridge_dev_s *g_usbdev = NULL;
 static pthread_t g_apbridge_thread;
 static struct apbridge_backend apbridge_backend;
@@ -167,8 +169,6 @@ static int usb_init(void)
 }
 
 
-
-
 int bridge_main(int argc, char *argv[])
 {
     int ret;
@@ -185,6 +185,9 @@ int bridge_main(int argc, char *argv[])
     }
 
 #ifdef CONFIG_EXAMPLES_NSH
+    printf("Calling nklabs_main\n");
+    nklabs_main(argc, argv);
+
     printf("Calling NSH\n");
     return nsh_main(argc, argv);
 #else
